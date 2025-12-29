@@ -39,6 +39,9 @@ function App() {
   const [password, setPassword] = useState("");
   const [result, setResult] = useState(null);
 
+  const [showPassword, setShowPassword] = useState(false);
+
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -78,12 +81,32 @@ function App() {
       <div className="card">
         <h1>SecurePass 🔐</h1>
 
-        <input
-          type="password"
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div style={{ position: "relative" }}>
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Enter password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+  />
+
+  <span
+    onClick={() => setShowPassword(!showPassword)}
+    style={{
+      position: "absolute",
+      right: "12px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      cursor: "pointer",
+      color: "#22c55e",
+      fontSize: "14px",
+      userSelect: "none",
+    }}
+    title={showPassword ? "Hide password" : "Show password"}
+  >
+    {showPassword ? "🙈" : "👁️"}
+  </span>
+</div>
+
 
         <button onClick={checkPassword} disabled={loading || !password}>
           {loading ? "Checking..." : "Check Password"}
