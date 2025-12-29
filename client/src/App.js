@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css";
 
 const calculateStrength = (password) => {
   let score = 0;
@@ -30,55 +31,52 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>SecurePass 🔐</h1>
+    <div className="container">
+      <div className="card">
+        <h1>SecurePass 🔐</h1>
 
-      <input
-        type="password"
-        placeholder="Enter password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <br /><br />
+        <button onClick={checkPassword}>Check Password</button>
 
-      <button onClick={checkPassword}>Check Password</button>
+        <div style={{ marginTop: "15px" }}>
+          <strong>Password Strength:</strong> {strength}/100
+        </div>
 
-      <br /><br />
+        <div className="strength-bar">
+          <div
+            className="strength-fill"
+            style={{
+              width: `${strength}%`,
+              background:
+                strength < 40
+                  ? "#ef4444"
+                  : strength < 70
+                  ? "#f59e0b"
+                  : "#22c55e",
+            }}
+          ></div>
+        </div>
 
-      <div>
-        <strong>Password Strength:</strong> {strength}/100
+        <div className="result">
+          {strength < 40 && "❌ Weak Password"}
+          {strength >= 40 && strength < 70 && "⚠️ Medium Password"}
+          {strength >= 70 && "✅ Strong Password"}
+        </div>
+
+        {result !== null && (
+          <div className="result">
+            {result
+              ? "❌ Password Found in Data Breach"
+              : "✅ Password Is Safe"}
+          </div>
+        )}
       </div>
-
-      <div
-        style={{
-          width: "300px",
-          height: "10px",
-          background: "#ddd",
-          marginTop: "5px",
-        }}
-      >
-        <div
-          style={{
-            width: `${strength}%`,
-            height: "10px",
-            background:
-              strength < 40 ? "red" : strength < 70 ? "orange" : "green",
-          }}
-        ></div>
-      </div>
-
-      <div>
-        {strength < 40 && "❌ Weak Password"}
-        {strength >= 40 && strength < 70 && "⚠️ Medium Password"}
-        {strength >= 70 && "✅ Strong Password"}
-      </div>
-
-      {result !== null && (
-        <h3>
-          {result ? "❌ Password Breached" : "✅ Password Safe"}
-        </h3>
-      )}
     </div>
   );
 }
