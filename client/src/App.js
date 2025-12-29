@@ -13,11 +13,35 @@ const calculateStrength = (password) => {
   return score;
 };
 
+const getPasswordTips = (password) => {
+  const tips = [];
+
+  if (password.length < 12) {
+    tips.push("Increase length to at least 12 characters");
+  }
+  if (!/[A-Z]/.test(password)) {
+    tips.push("Add at least one uppercase letter (A-Z)");
+  }
+  if (!/[a-z]/.test(password)) {
+    tips.push("Add at least one lowercase letter (a-z)");
+  }
+  if (!/[0-9]/.test(password)) {
+    tips.push("Add at least one number (0-9)");
+  }
+  if (!/[^A-Za-z0-9]/.test(password)) {
+    tips.push("Add at least one special character (!@#$...)");
+  }
+
+  return tips;
+};
+
 function App() {
   const [password, setPassword] = useState("");
   const [result, setResult] = useState(null);
 
   const strength = calculateStrength(password);
+  const tips = getPasswordTips(password);
+
 
   const checkPassword = async () => {
     const res = await fetch("http://localhost:5000/check-password", {
@@ -76,6 +100,23 @@ function App() {
               : "✅ Password Is Safe"}
           </div>
         )}
+        {password && (
+  <div style={{ marginTop: "15px", fontSize: "13px" }}>
+    <strong>Improvement Tips:</strong>
+    <ul style={{ marginTop: "8px", paddingLeft: "18px" }}>
+      {tips.length === 0 ? (
+        <li style={{ color: "#22c55e" }}>✅ Your password is strong</li>
+      ) : (
+        tips.map((tip, index) => (
+          <li key={index} style={{ color: "#facc15" }}>
+            ⚠️ {tip}
+          </li>
+        ))
+      )}
+    </ul>
+  </div>
+)}
+
       </div>
     </div>
   );
