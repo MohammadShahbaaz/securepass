@@ -39,20 +39,39 @@ function App() {
   const [password, setPassword] = useState("");
   const [result, setResult] = useState(null);
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+
   const strength = calculateStrength(password);
   const tips = getPasswordTips(password);
 
 
   const checkPassword = async () => {
+  setLoading(true);
+  setError("");
+  setResult(null);
+
+  try {
     const res = await fetch("http://localhost:5000/check-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
     });
 
+    if (!res.ok) {
+      throw new Error("Server error");
+    }
+
     const data = await res.json();
     setResult(data.breached);
-  };
+  } catch (err) {
+    setError("🛠️ Server is under maintenance. Please check back later.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="container">
@@ -66,7 +85,10 @@ function App() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button onClick={checkPassword}>Check Password</button>
+        <button onClick={checkPassword} disabled={loading || !password}>
+          {loading ? "Checking..." : "Check Password"}
+        </button>
+
 
         <div style={{ marginTop: "15px" }}>
           <strong>Password Strength:</strong> {strength}/100
@@ -100,6 +122,12 @@ function App() {
               : "✅ Password Is Safe"}
           </div>
         )}
+        {error && (
+          <div className="result" style={{ color: "#ef4444" }}>
+            {error}
+          </div>
+        )}
+
         {password && (
   <div style={{ marginTop: "15px", fontSize: "13px" }}>
     <strong>Improvement Tips:</strong>
