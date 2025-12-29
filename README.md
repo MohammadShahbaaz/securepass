@@ -65,26 +65,30 @@ This project is built for **educational and defensive security purposes only**.
 ```bash
 git clone https://github.com/YOUR_USERNAME/securepass.git
 cd securepass
-
+```
 2️⃣ Start Backend
+```bash
+
 cd server
 npm install
 node index.js
-
+```
+```bash
 Server will run on:
 
 http://localhost:5000
-
+```
 3️⃣ Start Frontend
+```bash
 cd client
 npm install
 npm start
-
-
+```
+```bash
 App will open on:
 
 http://localhost:3000
-
+```
 ⚠️ Disclaimer
 
 This project is intended only for educational purposes.
